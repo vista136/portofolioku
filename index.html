@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="id" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portofolio - Web & Mobile Programmer</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Konfigurasi Tailwind untuk menggunakan font Inter, warna kustom, dan Dark Mode berdasarkan class -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class', // Mengaktifkan dark mode menggunakan class 'dark'
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-dark': '#1F2937', // Dark Slate
+                        'secondary-blue': '#3B82F6', // Blue 500
+                        'accent-orange': '#F97316', // Orange 600
+                        // Warna kustom untuk Dark Mode
+                        'dark-bg': '#111827', // Gray 900
+                        'dark-card': '#1F2937', // Gray 800
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom styles for aesthetic */
+        body {
+            background-color: #F9FAFB; /* Light mode default */
+            transition: background-color 0.3s;
+        }
+        /* Dark mode overrides for body */
+        .dark body {
+            background-color: var(--tw-colors-dark-bg);
+            color: #E5E7EB; /* Gray 200 */
+        }
+        .skill-bar {
+            position: relative;
+            height: 0.75rem; /* h-3 */
+            border-radius: 9999px; /* rounded-full */
+            background-color: #E5E7EB; /* Gray 200 (light) */
+        }
+        .dark .skill-bar {
+            background-color: #4B5563; /* Gray 600 (dark) */
+        }
+        .skill-level {
+            height: 100%;
+            border-radius: 9999px;
+            background-color: #3B82F6; /* secondary-blue */
+            transition: width 1s ease-in-out;
+        }
+        .section-title {
+            position: relative;
+            display: inline-block;
+            padding-bottom: 0.5rem;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 4px;
+            background-color: #F97316; /* accent-orange */
+            border-radius: 2px;
+        }
+        /* Style for smooth scroll link */
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Responsive Grid for Portfolio */
+        #portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+            gap: 1.5rem;
+        }
+        @media (min-width: 640px) { /* sm breakpoint */
+            #portfolio-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+        @media (min-width: 1024px) { /* lg breakpoint */
+            #portfolio-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-800 dark:text-gray-100">
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 bg-white dark:bg-dark-card shadow-md dark:shadow-2xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- JUDUL WEBSITE BARU (Rapi) -->
+                <a href="#hero" class="text-primary-dark dark:text-gray-100 flex flex-col items-start leading-none">
+                    <span class="text-xl font-extrabold tracking-wider text-secondary-blue">ViSoftwareMedia</span>
+                    <span class="text-xs font-medium text-gray-500 dark:text-gray-400 mt-0.5">by Avista Kautsar</span>
+                </a>
+                <div class="flex items-center space-x-3">
+                    <!-- Language Toggle -->
+                    <button id="lang-toggle" class="p-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 transition duration-150 text-sm font-semibold w-12 h-8 flex items-center justify-center">
+                        <span id="current-lang-text">ID</span>
+                    </button>
+
+                    <!-- Dark Mode Toggle -->
+                    <button id="theme-toggle" class="p-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 transition duration-150">
+                        <svg id="sun-icon" class="h-5 w-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        <svg id="moon-icon" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    </button>
+
+                    <!-- Desktop Menu -->
+                    <div class="hidden sm:ml-6 sm:flex sm:space-x-8" id="desktop-nav">
+                        <!-- Navigation links will be dynamically populated -->
+                    </div>
+                </div>
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-button" class="sm:hidden p-2 rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-secondary-blue">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden sm:hidden bg-white dark:bg-dark-card border-t border-gray-200 dark:border-gray-700">
+            <div class="pt-2 pb-3 space-y-1 px-2" id="mobile-nav">
+                <!-- Mobile navigation links will be dynamically populated -->
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="hero" class="bg-primary-dark dark:bg-dark-card text-white pt-24 pb-28 md:pt-32 md:pb-40 transition duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 id="hero-title" class="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-4">
+                <!-- Text populated by JS -->
+            </h1>
+            <p id="hero-subtitle" class="text-xl sm:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                <!-- Text populated by JS -->
+            </p>
+            <a href="#portfolio" id="hero-button" class="inline-block bg-secondary-blue hover:bg-blue-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition duration-300">
+                <!-- Text populated by JS -->
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <!-- About Me Section -->
+        <section id="about" class="py-16 md:py-24 bg-white dark:bg-dark-bg transition duration-300">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 id="about-title" class="text-3xl font-bold text-center mb-12 section-title"></h2>
+                <div class="max-w-4xl mx-auto bg-white dark:bg-dark-card p-8 rounded-xl shadow-xl border-t-4 border-secondary-blue dark:border-accent-orange">
+                    <!-- Detail Nama -->
+                    <p class="text-xl font-bold text-primary-dark dark:text-gray-100 mb-4" data-lang-key="about_name">Nama: Avista Kautsar</p>
+                    <p id="about-p1" class="text-lg leading-relaxed mb-4 text-gray-800 dark:text-gray-200">
+                        <!-- Text populated by JS -->
+                    </p>
+                    <p id="about-p2" class="text-lg leading-relaxed text-gray-800 dark:text-gray-200">
+                        <!-- Text populated by JS -->
+                    </p>
+
+                    <div class="mt-10 pt-6 border-t border-gray-200 dark:border-gray-700">
+                        <h3 id="language-skill-title" class="text-2xl font-semibold mb-4 text-primary-dark dark:text-gray-100"></h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <p class="font-medium text-gray-800 dark:text-gray-200" data-lang-key="lang_id">Indonesia</p>
+                                <div class="skill-bar mt-1">
+                                    <div class="skill-level" style="width: 100%; background-color: #10B981;"></div>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-1" data-lang-key="lang_id_level">100% (Native)</p>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-800 dark:text-gray-200" data-lang-key="lang_en">English</p>
+                                <div class="skill-bar mt-1">
+                                    <div class="skill-level" style="width: 40%; background-color: #FBBF24;"></div>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-1" data-lang-key="lang_en_level">40%</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="py-16 md:py-24 bg-gray-50 dark:bg-gray-800 transition duration-300">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 id="skills-title" class="text-3xl font-bold text-center mb-12 section-title text-gray-800 dark:text-gray-100"></h2>
+
+                <div class="max-w-5xl mx-auto space-y-8">
+                    <!-- Web & Mobile Tech -->
+                    <div class="bg-white dark:bg-dark-card p-6 rounded-xl shadow-lg dark:shadow-2xl">
+                        <h3 data-lang-key="skill_web_mobile" class="text-2xl font-semibold text-secondary-blue mb-4 border-b pb-2 border-gray-200 dark:border-gray-700"></h3>
+                        <div id="web-mobile-skills" class="space-y-4">
+                            <!-- Skills rendered by JS -->
+                        </div>
+                    </div>
+
+                    <!-- DB Tech -->
+                    <div class="bg-white dark:bg-dark-card p-6 rounded-xl shadow-lg dark:shadow-2xl">
+                        <h3 data-lang-key="skill_db" class="text-2xl font-semibold text-secondary-blue mb-4 border-b pb-2 border-gray-200 dark:border-gray-700"></h3>
+                        <div id="db-skills" class="space-y-4">
+                            <!-- Skills rendered by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Networking & Firewall -->
+                    <div class="bg-white dark:bg-dark-card p-6 rounded-xl shadow-lg dark:shadow-2xl">
+                        <h3 data-lang-key="skill_network" class="text-2xl font-semibold text-secondary-blue mb-4 border-b pb-2 border-gray-200 dark:border-gray-700"></h3>
+                        <div id="network-skills" class="space-y-4">
+                            <!-- Skills rendered by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Server Config and Panel -->
+                    <div class="bg-white dark:bg-dark-card p-6 rounded-xl shadow-lg dark:shadow-2xl">
+                        <h3 data-lang-key="skill_server" class="text-2xl font-semibold text-secondary-blue mb-4 border-b pb-2 border-gray-200 dark:border-gray-700"></h3>
+                        <div id="server-skills" class="space-y-4">
+                            <!-- Skills rendered by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio Section -->
+        <section id="portfolio" class="py-16 md:py-24 bg-white dark:bg-dark-bg transition duration-300">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 id="portfolio-title" class="text-3xl font-bold text-center mb-12 section-title text-gray-800 dark:text-gray-100"></h2>
+
+                <div id="portfolio-grid">
+                    <!-- Projects rendered by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact/Footer Section -->
+        <footer id="contact" class="bg-primary-dark dark:bg-dark-card text-white py-12 md:py-16 transition duration-300">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h3 id="contact-title" class="text-3xl font-bold mb-4"></h3>
+                <p id="contact-subtitle" class="text-xl text-gray-300 mb-8 max-w-lg mx-auto">
+                    <!-- Text populated by JS -->
+                </p>
+                <!-- Contact Info -->
+                <div class="bg-white p-6 rounded-xl shadow-xl max-w-md mx-auto">
+                    <p class="text-gray-700 font-semibold mb-2" data-lang-key="contact_email"></p>
+                    <p class="text-gray-700 font-semibold" data-lang-key="contact_phone"></p>
+                </div>
+                <div class="mt-12 border-t border-gray-700 pt-6">
+                    <p class="text-sm text-gray-400" id="footer-text">&copy; 2025 ViSoftwareMedia. Dibuat dengan Passion dan Fokus pada Sistem.</p>
+                </div>
+            </div>
+        </footer>
+
+    </main>
+
+    <script>
+        // Data Struktur untuk Teks Halaman (Multi-bahasa)
+        const textContent = {
+            id: {
+                // Navbar
+                nav_about: 'Tentang Saya',
+                nav_skills: 'Keahlian',
+                nav_portfolio: 'Portofolio',
+                nav_contact: 'Kontak',
+
+                // Hero
+                hero_title: 'Hai, Saya Seorang <span class="text-accent-orange">Programmer</span>',
+                hero_subtitle: 'Web & Mobile Developer. Fokus pada Sistem yang Lancar dan Aman.',
+                hero_button: 'Lihat Portofolio Saya',
+
+                // About
+                about_title: 'Tentang Saya',
+                about_name: 'Nama: Avista Kautsar',
+                about_p1: 'Base skill saya adalah **Web Programming** dan **Mobile Programming** (masih dalam tahap belajar). Fokus utama saya adalah membangun sistem yang dapat berjalan dengan **lancar dan aman**. Saya mengakui, saya sangat kurang di bidang UI/UX karena bagi saya, fungsionalitas dan keamanan sistem adalah prioritas tertinggi.',
+                about_p2: 'Saya memiliki kecintaan yang besar terhadap coding. Bagi saya, coding adalah *passion*. Saya adalah tipe orang yang suka penasaran dan sangat termotivasi saat dihadapkan pada suatu *case* atau masalah yang belum terpecahkan. Saya selalu antusias untuk terus belajar hal-hal baru.',
+                language_skill_title: 'Kemampuan Bahasa',
+                lang_id: 'Indonesia',
+                lang_id_level: '100% (Native)',
+                lang_en: 'English',
+                lang_en_level: '40%',
+
+                // Skills
+                skills_title: 'Keahlian Teknis',
+                skill_web_mobile: 'Web & Mobile Development',
+                skill_db: 'Database Technology',
+                skill_network: 'Networking & Firewall',
+                skill_server: 'Server Configuration & Panel',
+
+                // Portfolio
+                portfolio_title: 'Portofolio Pilihan',
+                portfolio_link: 'Kunjungi Proyek',
+
+                // Contact
+                contact_title: 'Tertarik untuk Berkolaborasi?',
+                contact_subtitle: 'Silakan hubungi saya untuk membahas proyek atau kesempatan kerja.',
+                // CONTACT BARU
+                contact_email: 'Email: avistakautsar01@gmail.com',
+                contact_phone: 'WhatsApp: +6287730684718',
+                footer_text: '&copy; 2025 ViSoftwareMedia. Dibuat dengan Passion dan Fokus pada Sistem.',
+            },
+            en: {
+                // Navbar
+                nav_about: 'About Me',
+                nav_skills: 'Skills',
+                nav_portfolio: 'Portfolio',
+                nav_contact: 'Contact',
+
+                // Hero
+                hero_title: 'Hi, I Am A <span class="text-accent-orange">Programmer</span>',
+                hero_subtitle: 'Web & Mobile Developer. Focused on Seamless and Secure Systems.',
+                hero_button: 'View My Portfolio',
+
+                // About
+                about_title: 'About Me',
+                about_name: 'Name: Avista Kautsar',
+                about_p1: 'My base skills are **Web Programming** and **Mobile Programming** (still learning). My main focus is on building systems that run **smoothly and securely**. I admit I lack skills in UI/UX because, for me, system functionality and security are the top priorities.',
+                about_p2: 'I have a great passion for coding. Coding is my drive. I am the type of person who is curious and highly motivated when facing a case or unsolved problem. I am always enthusiastic about learning new things.',
+                language_skill_title: 'Language Proficiency',
+                lang_id: 'Indonesian',
+                lang_id_level: '100% (Native)',
+                lang_en: 'English',
+                lang_en_level: '40%',
+
+                // Skills
+                skills_title: 'Technical Skills',
+                skill_web_mobile: 'Web & Mobile Development',
+                skill_db: 'Database Technology',
+                skill_network: 'Networking & Firewall',
+                skill_server: 'Server Configuration & Panel',
+
+                // Portfolio
+                portfolio_title: 'Featured Portfolio',
+                portfolio_link: 'Visit Project',
+
+                // Contact
+                contact_title: 'Interested in Collaboration?',
+                contact_subtitle: 'Please contact me to discuss projects or job opportunities.',
+                // CONTACT BARU
+                contact_email: 'Email: avistakautsar01@gmail.com',
+                contact_phone: 'WhatsApp: +6287730684718',
+                footer_text: '&copy; 2025 ViSoftwareMedia. Built with Passion and System Focus.',
+            }
+        };
+
+
+        // Data Keahlian (Tidak perlu diterjemahkan, hanya level)
+        const skillsData = {
+            'Web & Mobile Tech': [
+                { name: 'PHP Native', level: 90 },
+                { name: 'Javascript Native', level: 80 },
+                { name: 'CSS', level: 80 },
+                { name: 'JQuery', level: 80 },
+                { name: 'React Native', level: 60 },
+                { name: 'Laravel', level: 70 },
+                { name: 'Flutter', level: 50 },
+                { name: 'Kotlin', level: 50 },
+                { name: 'Wordpress', level: 30 },
+            ],
+            'DB Tech': [
+                { name: 'MySQL', level: 70 },
+                { name: 'MongoDB', level: 50 },
+                { name: 'SQLite', level: 40 },
+            ],
+            'Networking & Firewall': [
+                { name: 'Mikrotik', level: 50 },
+                { name: 'CSF Firewall', level: 40 },
+            ],
+            'Server Config and Panel': [
+                { name: 'Linux Config', level: 50 },
+                { name: 'Apache Web Server', level: 50 },
+                { name: 'Nginx Web Server', level: 40 },
+                { name: 'PHP-CLi & PHP-FPM', level: 70 },
+                { name: 'WHM/cPanel', level: 60 },
+                { name: 'CWP', level: 60 },
+            ],
+        };
+
+        // Data Portofolio (Menggunakan path gambar yang Anda upload)
+        const projectsData = [
+            {
+                title: 'Vacanook - E-Commerce Buku Online',
+                description_id: 'Website penjualan buku secara online. Pengguna dapat membeli dan membaca buku secara online.',
+                description_en: 'Online book sales website. Users can purchase and read books online.',
+                url: 'https://vacanook.com',
+                tech: ['Laravel', 'Bootstrap', 'Midtrans Payment Gateway'],
+                image: 'uploaded:Screenshot at Oct 26 09-57-46.jpg-4a6cd439-03d3-400f-b78e-3ae84bb9de7d',
+                alt: 'Website Vacanook screenshot',
+            },
+            {
+                title: 'SMP N 4 Boyolali - Portal Sekolah',
+                description_id: 'Website Portal milik Sekolahan SMP N 4 Boyolali untuk informasi dan kegiatan sekolah.',
+                description_en: 'Official School Portal Website for SMP N 4 Boyolali for school information and activities.',
+                url: 'https://smpn4boyolali.sch.id',
+                tech: ['Wordpress CMS'],
+                image: 'uploaded:Screenshot at Oct 26 10-06-44.jpg-7a311ee6-52aa-4038-93ba-167e0af997e7',
+                alt: 'Website SMP N 4 Boyolali screenshot',
+            },
+            {
+                title: 'AKUN.biz - Aplikasi Buku Kas Online',
+                description_id: 'Aplikasi mobile untuk pencatatan buku kas dan keuangan secara online.',
+                description_en: 'Mobile application for online cash book and financial record keeping.',
+                url: 'https://play.google.com/store/apps/details?id=biz.akun.apps&hl=id&pli=1',
+                tech: ['Cordova Framework (Mobile APP)', 'PHP Native (Backend)'],
+                image: 'uploaded:Screenshot at Oct 26 10-09-22.jpg-56d073e1-b19a-4945-a0a0-3fa6d009465e',
+                alt: 'AKUN.biz app on Google Play screenshot',
+            },
+            {
+                title: 'Tinekanan Tour - Rental Mobil Online',
+                description_id: 'Website untuk layanan rental mobil secara online.',
+                description_en: 'Website for online car rental services.',
+                url: 'https://www.tinekanantour.com/',
+                tech: ['PHP Native'],
+                image: 'uploaded:Screenshot at Oct 26 10-18-24.jpg-5216ab36-f5c5-4d4c-aaec-9a5b7315eadf',
+                alt: 'Tinekanan Tour website screenshot',
+            },
+            {
+                title: 'JennyPools - Aplikasi Broadcast Whatsapp',
+                description_id: 'Aplikasi untuk melakukan broadcast pesan melalui WhatsApp.',
+                description_en: 'Application for sending broadcast messages via WhatsApp.',
+                url: 'https://jennypools.com',
+                tech: ['Laravel', 'Node.js'],
+                image: 'uploaded:Screenshot at Oct 26 10-21-00.jpg-48988201-9f61-4565-85ca-e460de1dcad3',
+                alt: 'JennyPools dashboard screenshot',
+            },
+            {
+                title: 'ViPlay - Aplikasi TV Online',
+                description_id: 'Aplikasi mobile untuk menonton TV secara online.',
+                description_en: 'Mobile application for watching online TV.',
+                url: 'https://play.google.com/store/apps/details?id=com.vitvplay.app&hl=id',
+                tech: ['Kotlin', 'Node.js (Backend)'],
+                image: 'uploaded:Screenshot at Oct 26 10-41-47.jpg-4cc3b80f-7d82-4a1d-b69b-c612fd0eb1de',
+                alt: 'ViPlay app on Google Play screenshot',
+            },
+        ];
+
+        // Status global
+        let currentLang = 'id';
+        let isDarkMode = false;
+
+
+        // --- FUNGSI MULTI-BAHASA (TRANSLATION) ---
+
+        function updateContent(lang) {
+            const dictionary = textContent[lang];
+            currentLang = lang;
+
+            // 1. Update elemen navigasi (sebelum skill dan portfolio)
+            const navLinks = [
+                { id: 'desktop-nav', tag: 'div', links: ['nav_about', 'nav_skills', 'nav_portfolio', 'nav_contact'] },
+                { id: 'mobile-nav', tag: 'a', links: ['nav_about', 'nav_skills', 'nav_portfolio', 'nav_contact'] }
+            ];
+
+            navLinks.forEach(nav => {
+                const container = document.getElementById(nav.id);
+                if (container) {
+                    container.innerHTML = ''; // Clear existing links
+
+                    const sections = ['about', 'skills', 'portfolio', 'contact'];
+                    sections.forEach((sectionId, index) => {
+                        const linkTextKey = nav.links[index];
+                        const link = document.createElement('a');
+                        link.href = `#${sectionId}`;
+
+                        if (nav.tag === 'div') { // Desktop Link
+                            link.className = 'text-gray-900 dark:text-gray-200 hover:text-secondary-blue dark:hover:text-accent-orange transition duration-150 ease-in-out px-3 py-2 rounded-md font-medium';
+                        } else { // Mobile Link
+                            link.className = 'block px-3 py-2 rounded-md text-base font-medium text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-secondary-blue dark:hover:text-accent-orange';
+                            link.addEventListener('click', () => document.getElementById('mobile-menu').classList.add('hidden'));
+                        }
+                        link.innerHTML = dictionary[linkTextKey];
+                        container.appendChild(link);
+                    });
+                }
+            });
+
+            // 2. Update elemen statis
+            document.getElementById('hero-title').innerHTML = dictionary.hero_title;
+            document.getElementById('hero-subtitle').innerText = dictionary.hero_subtitle;
+            document.getElementById('hero-button').innerText = dictionary.hero_button;
+            document.getElementById('about-title').innerText = dictionary.about_title;
+            document.getElementById('about-p1').innerHTML = dictionary.about_p1; // Pakai innerHTML karena ada tag <b>
+            document.getElementById('about-p2').innerHTML = dictionary.about_p2; // Pakai innerHTML karena ada tag <i>
+            document.getElementById('language-skill-title').innerText = dictionary.language_skill_title;
+            document.getElementById('skills-title').innerText = dictionary.skills_title;
+            document.getElementById('portfolio-title').innerText = dictionary.portfolio_title;
+            document.getElementById('contact-title').innerText = dictionary.contact_title;
+            document.getElementById('contact-subtitle').innerText = dictionary.contact_subtitle;
+            document.getElementById('footer-text').innerHTML = dictionary.footer_text;
+            document.getElementById('current-lang-text').innerText = lang.toUpperCase();
+
+            // 3. Update elemen dengan data-lang-key
+            document.querySelectorAll('[data-lang-key]').forEach(el => {
+                const key = el.getAttribute('data-lang-key');
+                if (dictionary[key]) {
+                    el.innerText = dictionary[key];
+                }
+            });
+
+            // 4. Render ulang Portofolio dengan deskripsi yang tepat
+            renderPortfolio();
+
+            // Simpan bahasa ke localStorage
+            localStorage.setItem('portfolioLang', lang);
+        }
+
+        // --- FUNGSI RENDER SKILLS & PORTFOLIO ---
+
+        // Fungsi untuk merender bar skill
+        function renderSkillBars() {
+            for (const category in skillsData) {
+                let targetId;
+                if (category === 'Web & Mobile Tech') targetId = 'web-mobile-skills';
+                else if (category === 'DB Tech') targetId = 'db-skills';
+                else if (category === 'Networking & Firewall') targetId = 'network-skills';
+                else if (category === 'Server Config and Panel') targetId = 'server-skills';
+
+                const container = document.getElementById(targetId);
+                if (container) {
+                    container.innerHTML = ''; // Clear previous content
+                    skillsData[category].forEach(skill => {
+                        const skillDiv = document.createElement('div');
+                        skillDiv.className = 'py-2';
+                        skillDiv.innerHTML = `
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium text-gray-700 dark:text-gray-300">${skill.name}</span>
+                                <span class="text-sm font-semibold text-secondary-blue">${skill.level}%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-level bg-secondary-blue" style="width: ${skill.level}%;"></div>
+                            </div>
+                        `;
+                        container.appendChild(skillDiv);
+                    });
+                }
+            }
+        }
+
+        // Fungsi untuk merender Portofolio
+        function renderPortfolio() {
+            const container = document.getElementById('portfolio-grid');
+            if (container) {
+                container.innerHTML = ''; // Clear previous content
+
+                projectsData.forEach(project => {
+                    const projectCard = document.createElement('div');
+                    projectCard.className = 'bg-white dark:bg-dark-card rounded-xl shadow-xl dark:shadow-2xl overflow-hidden transform hover:scale-[1.02] transition duration-300 border-t-4 border-accent-orange/80';
+
+                    // Menyiapkan deskripsi berdasarkan bahasa saat ini
+                    const descriptionKey = `description_${currentLang}`;
+                    const description = project[descriptionKey] || project.description_id;
+
+                    // Menyiapkan tag teknologi
+                    const techTags = project.tech.map(t => `<span class="inline-block bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-300 text-xs px-3 py-1 rounded-full font-semibold mr-2 mb-2">${t}</span>`).join('');
+
+                    projectCard.innerHTML = `
+                        <div class="h-48 overflow-hidden bg-gray-100 dark:bg-gray-700">
+                            <!-- Menggunakan URL gambar yang diunggah, dengan fallback ke placeholder -->
+                            <img src="${project.image}" alt="${project.alt}"
+                                class="w-full h-full object-cover"
+                                onerror="this.onerror=null; this.src='https://placehold.co/600x400/1F2937/FFFFFF?text=No+Preview';"
+                            >
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-primary-dark dark:text-gray-100 mb-3">${project.title}</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">${description}</p>
+                            <div class="flex flex-wrap mb-4">
+                                ${techTags}
+                            </div>
+                            <a href="${project.url}" target="_blank" class="text-secondary-blue hover:text-blue-700 dark:text-accent-orange dark:hover:text-orange-400 font-semibold flex items-center transition duration-150">
+                                ${textContent[currentLang].portfolio_link}
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                            </a>
+                        </div>
+                    `;
+                    container.appendChild(projectCard);
+                });
+            }
+        }
+
+        // --- FUNGSI DARK MODE ---
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            isDarkMode = html.classList.toggle('dark');
+
+            // Update ikon
+            document.getElementById('sun-icon').classList.toggle('hidden', !isDarkMode);
+            document.getElementById('moon-icon').classList.toggle('hidden', isDarkMode);
+
+            // Simpan preferensi ke localStorage
+            localStorage.setItem('portfolioTheme', isDarkMode ? 'dark' : 'light');
+        }
+
+        function loadThemePreference() {
+            const savedTheme = localStorage.getItem('portfolioTheme');
+            if (savedTheme === 'dark') {
+                isDarkMode = true;
+                document.documentElement.classList.add('dark');
+            } else {
+                isDarkMode = false;
+                document.documentElement.classList.remove('dark');
+            }
+            // Inisialisasi ikon yang benar
+            document.getElementById('sun-icon').classList.toggle('hidden', !isDarkMode);
+            document.getElementById('moon-icon').classList.toggle('hidden', isDarkMode);
+        }
+
+        // --- INISIALISASI ---
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Muat Preferensi Tema
+            loadThemePreference();
+
+            // 2. Muat Preferensi Bahasa
+            const savedLang = localStorage.getItem('portfolioLang');
+            updateContent(savedLang in textContent ? savedLang : 'id');
+
+            // 3. Render Skills
+            renderSkillBars();
+
+            // 4. Tambahkan Event Listeners
+
+            // Toggle Bahasa
+            document.getElementById('lang-toggle').addEventListener('click', () => {
+                const newLang = currentLang === 'id' ? 'en' : 'id';
+                updateContent(newLang);
+            });
+
+            // Toggle Dark Mode
+            document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+
+            // Toggle Menu Mobile
+            document.getElementById('mobile-menu-button').addEventListener('click', function() {
+                const mobileMenu = document.getElementById('mobile-menu');
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Tutup Menu Mobile saat link diklik
+            // Memasang event listener untuk link yang dibuat secara dinamis
+            document.getElementById('mobile-nav').addEventListener('click', (event) => {
+                if (event.target.tagName === 'A') {
+                    document.getElementById('mobile-menu').classList.add('hidden');
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
